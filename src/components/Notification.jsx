@@ -16,12 +16,7 @@ const Notification = () => {
   }
 
   if (!notification) return null
-  else {
-    setTimeout(() => {
-      console.log('Borrar notificación')
-      dispatch(rmNoti())
-    }, 5000)
-  }
+  else setTimeout(() => { dispatch(rmNoti()) }, 5000)
 
   return (
     <div style={style}>
