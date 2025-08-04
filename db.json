@@ -1,0 +1,39 @@
+{
+  "blogs": [
+    {
+      "id": "1",
+      "title": "No puedo dejar de pensar en la estética de los errores 404",
+      "author": "Ramiro Loop Muerto",
+      "url": "https://nostalgia404.tumblr.com",
+      "likes": 1999
+    },
+    {
+      "id": "2",
+      "title": "El horóscopo de tus componentes React",
+      "author": "Saturnina V. Hook",
+      "url": "https://reactoscope.vercel.app",
+      "likes": 3587
+    },
+    {
+      "title": "Cosas que a nadie le importan, pero a mí sí",
+      "author": "Pablo Sobredosis de Café",
+      "url": "https://literattack.substack.com",
+      "likes": "742",
+      "id": "3"
+    },
+    {
+      "id": "4",
+      "title": "Diseño UX para gatos: sí, leíste bien",
+      "author": "Anamaría Cursorcito",
+      "url": "https://meowexperience.medium.com",
+      "likes": 6031
+    },
+    {
+      "title": "La importancia de ir a tocar césped de vez en cuando",
+      "author": "Lucía Punto y Coma",
+      "url": "https://backendmelancolía.dev",
+      "likes": "818",
+      "id": "5"
+    }
+  ]
+}
