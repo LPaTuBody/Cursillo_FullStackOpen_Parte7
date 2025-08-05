@@ -1,4 +1,9 @@
-const loginForm = ({ handleLogin }) => {
+import { useDispatch } from "react-redux"
+import { handleLogin } from "../reducers/loged-user"
+
+const loginForm = () => {
+  const dispatch = useDispatch()
+
   const handleSubmitLogin = (e) => {
     e.preventDefault()
     if (e.nativeEvent.submitter.className === 'new_user')
@@ -10,12 +15,10 @@ const loginForm = ({ handleLogin }) => {
       if (!frmUsername) return e.target[0].focus()
       else if (!frmPswd) return e.target[1].focus()
 
-      const userObj = {
+      dispatch(handleLogin({
         username: frmUsername,
         password: frmPswd,
-      }
-
-      handleLogin(userObj)
+      }))
     }
   }
 

@@ -1,6 +1,10 @@
-const Form = ({ handleSubmit, rstUpd, configNoti, blogFormRef }) => {
-  if (typeof handleSubmit !== 'function')
-    throw new Error('handleSubmit must be a function')
+import { useDispatch } from 'react-redux'
+import { addNoti } from '../reducers/notifications'
+
+const Form = ({ handleSubmit, rstUpd, blogFormRef }) => {
+  if (typeof handleSubmit !== 'function') throw new Error('handleSubmit must be a function')
+
+  const dispatch = useDispatch()
 
   const handleBlogSubmit = (e) => {
     e.preventDefault()
@@ -16,7 +20,7 @@ const Form = ({ handleSubmit, rstUpd, configNoti, blogFormRef }) => {
       blogFormRef.current.toggleVisibility()
       e.target.reset()
     } else if (!newBlog.title && !newBlog.author && !newBlog.url) {
-      configNoti('All fields are required!', 'error')
+      dispatch(addNoti(['All fields are required!', 'error']))
       console.log('All fields are required!')
       return
     } else handleSubmit(newBlog)
@@ -41,6 +45,7 @@ const Form = ({ handleSubmit, rstUpd, configNoti, blogFormRef }) => {
           <label htmlFor="url">Likes</label>
           <input type="number" id="likes" name="likes" className="inp_form" />
         </div>
+
         <div className="frm_btn_container">
           <button type="submit" data-testid="submit_btn">
             Save Blog

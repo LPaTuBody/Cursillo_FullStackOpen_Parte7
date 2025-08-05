@@ -1,4 +1,10 @@
-const Notification = ({ message, type, onClose }) => {
+import { useSelector, useDispatch } from "react-redux"
+import { rmNoti } from "../reducers/notifications"
+
+const Notification = () => {
+  const [message, type] = useSelector(state => state.notification)
+  const dispatch = useDispatch()
+
   if (!message) return null
 
   const notificationStyle = {
@@ -26,7 +32,7 @@ const Notification = ({ message, type, onClose }) => {
   return (
     <div id="notification_div" style={notificationStyle}>
       <p>{message}</p>
-      <button onClick={onClose} style={buttonStyle}>
+      <button onClick={() => dispatch(rmNoti())} style={buttonStyle}>
         &#10005;
       </button>
     </div>

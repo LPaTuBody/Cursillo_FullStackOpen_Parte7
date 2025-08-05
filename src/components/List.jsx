@@ -1,34 +1,21 @@
 import { useEffect, useRef } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { addNoti } from '../reducers/notifications'
+import { deleteBlog, likeBlog } from '../reducers/blogs'
 
-const List = ({
-  blogs,
-  users,
-  userLoged,
-  onDltClick,
-  likingBlog,
-  updatingBlog,
-  blogFormRef,
-  configNoti,
-}) => {
-  if (typeof blogs !== 'object') throw new Error('blogs need to be an object')
-  else if (typeof users !== 'object')
-    throw new Error('users need to be an object')
-  else if (typeof userLoged !== 'object')
+const List = ({ userLoged, updatingBlog, blogFormRef }) => {
+  if (typeof userLoged !== 'object')
     throw new Error('userLoged need to be an object')
   else if (typeof blogFormRef !== 'object')
     throw new Error('blogFormRef need to be an object')
-
-  if (typeof updatingBlog !== 'function')
+  else if (typeof updatingBlog !== 'function')
     throw new Error('updatingBlog need to be an function')
-  else if (typeof onDltClick !== 'function')
-    throw new Error('onDltClick need to be an function')
-  else if (typeof likingBlog !== 'function')
-    throw new Error('likingBlog need to be an function')
-  else if (typeof configNoti !== 'function')
-    throw new Error('configNoti need to be an function')
   // prop-types don't work with React 19
 
   const alreadyHidden = useRef(false)
+  const dispatch = useDispatch()
+  const blogs = useSelector(state => state.blog)
+  const users = useSelector(state => state.user)
 
   useEffect(() => {
     if (blogs.length > 0 && !alreadyHidden.current) {
@@ -50,7 +37,7 @@ const List = ({
 
     if (userLoged.name === details.lastChild.lastChild.textContent) {
       const elemento = document.querySelector(
-        `li[id="${blogID}"] .btn_container .specific_show_btn`,
+        `li[id="${blogID}"] .btn_container .specific_show_btn`
       )
       const elemDisplay = elemento.style.display
       elemento.style.display = elemDisplay === 'none' ? '' : 'none'
@@ -66,7 +53,7 @@ const List = ({
       likes: blogToLike.likes + 1,
       user: blogToLike.user.id,
     }
-    likingBlog(id, likedBlog)
+    dispatch(likeBlog(id, likedBlog))
   }
 
   const onUpdClick = (id) => {
@@ -84,7 +71,7 @@ const List = ({
       form.likes.value = blogToUpdate.likes || 0
       scrollTo(0, 0)
     } else {
-      configNoti('Blog not found!', 'error')
+      dispatch(addNoti(['Blog not found!', 'error']))
       console.error('Blog not found for update:', id)
     }
   }
@@ -92,12 +79,13 @@ const List = ({
   if (!blogs || blogs.length === 0 || !Array.isArray(blogs))
     return <div>No blogs available!</div>
   else {
-    blogs.sort((a, b) => b.likes - a.likes)
+    const sortedBlogs = [...blogs].sort((a, b) => b.likes - a.likes)
     return (
       <div>
         <ul>
-          {blogs.map((blog, i) => (
+          {sortedBlogs.map((blog, i) => (
             <li key={blog.id} id={i}>
+
               <div className="blog_info">
                 <strong>{blog.title}</strong>
                 <div id={i} className="blog_details">
@@ -138,12 +126,13 @@ const List = ({
                   </button>
                   <button
                     className="dlt_btn"
-                    onClick={() => onDltClick(blog.id)}
+                    onClick={() => dispatch(deleteBlog(blog.id))}
                   >
                     Delete
                   </button>
                 </div>
               </div>
+
             </li>
           ))}
         </ul>
