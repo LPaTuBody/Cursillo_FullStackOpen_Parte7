@@ -1,4 +1,8 @@
-const loginForm = ({ handleLogin }) => {
+import { useLoginMutation } from '../hooks/loginHooks'
+
+const LoginForm = () => {
+  const { handleLogin } = useLoginMutation()
+
   const handleSubmitLogin = (e) => {
     e.preventDefault()
     if (e.nativeEvent.submitter.className === 'new_user')
@@ -10,12 +14,10 @@ const loginForm = ({ handleLogin }) => {
       if (!frmUsername) return e.target[0].focus()
       else if (!frmPswd) return e.target[1].focus()
 
-      const userObj = {
+      handleLogin({
         username: frmUsername,
         password: frmPswd,
-      }
-
-      handleLogin(userObj)
+      })
     }
   }
 
@@ -49,4 +51,4 @@ const loginForm = ({ handleLogin }) => {
   )
 }
 
-export default loginForm
+export default LoginForm

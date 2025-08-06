@@ -1,34 +1,24 @@
 import { useEffect, useRef } from 'react'
+import { useNotiDispatch, setNoti } from '../contexts/NotiContext'
+import { useBlogValue } from '../contexts/BlogContext'
+import { useUserLoged } from '../contexts/LoginContext'
+import { useBlogMutation } from '../hooks/blogHooks'
+import { useUsersValue } from '../contexts/UsersContext'
 
-const List = ({
-  blogs,
-  users,
-  userLoged,
-  onDltClick,
-  likingBlog,
-  updatingBlog,
-  blogFormRef,
-  configNoti,
-}) => {
-  if (typeof blogs !== 'object') throw new Error('blogs need to be an object')
-  else if (typeof users !== 'object')
-    throw new Error('users need to be an object')
-  else if (typeof userLoged !== 'object')
-    throw new Error('userLoged need to be an object')
-  else if (typeof blogFormRef !== 'object')
+const List = ({ updatingBlog, blogFormRef }) => {
+  if (typeof blogFormRef !== 'object')
     throw new Error('blogFormRef need to be an object')
-
   if (typeof updatingBlog !== 'function')
     throw new Error('updatingBlog need to be an function')
-  else if (typeof onDltClick !== 'function')
-    throw new Error('onDltClick need to be an function')
-  else if (typeof likingBlog !== 'function')
-    throw new Error('likingBlog need to be an function')
-  else if (typeof configNoti !== 'function')
-    throw new Error('configNoti need to be an function')
   // prop-types don't work with React 19
 
   const alreadyHidden = useRef(false)
+  const notiDispatch = useNotiDispatch()
+  const { deleteBlog, likeBlog } = useBlogMutation()
+
+  const blogs = useBlogValue()
+  const userLoged = useUserLoged()
+  const users = useUsersValue()
 
   useEffect(() => {
     if (blogs.length > 0 && !alreadyHidden.current) {
@@ -42,6 +32,8 @@ const List = ({
       console.log('Blogs setted')
     }
   }, [blogs])
+
+  /*  ---------------------------------------------  */
 
   const showingDetails = (blogID) => {
     const details = document.querySelector(`.blog_details[id="${blogID}"]`)
@@ -57,6 +49,12 @@ const List = ({
     }
   }
 
+  const onDltClick = (id) => {
+    if (window.confirm('Are you sure you want to delete this blog?')) {
+      deleteBlog(id)
+    } else console.log('Blog deletion cancelled')
+  }
+
   const onLikeClick = (id) => {
     const blogToLike = blogs.find((blog) => blog.id === id)
     const likedBlog = {
@@ -66,7 +64,7 @@ const List = ({
       likes: blogToLike.likes + 1,
       user: blogToLike.user.id,
     }
-    likingBlog(id, likedBlog)
+    likeBlog({ id, likedBlog })
   }
 
   const onUpdClick = (id) => {
@@ -84,10 +82,12 @@ const List = ({
       form.likes.value = blogToUpdate.likes || 0
       scrollTo(0, 0)
     } else {
-      configNoti('Blog not found!', 'error')
+      notiDispatch(setNoti(['Blog not found!', 'error']))
       console.error('Blog not found for update:', id)
     }
   }
+
+  /*  ---------------------------------------------  */
 
   if (!blogs || blogs.length === 0 || !Array.isArray(blogs))
     return <div>No blogs available!</div>

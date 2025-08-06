@@ -1,6 +1,10 @@
-const Form = ({ handleSubmit, rstUpd, configNoti, blogFormRef }) => {
+import { useNotiDispatch, setNoti } from '../contexts/NotiContext'
+
+const Form = ({ handleSubmit, rstUpd, blogFormRef }) => {
   if (typeof handleSubmit !== 'function')
     throw new Error('handleSubmit must be a function')
+
+  const notiDispatch = useNotiDispatch()
 
   const handleBlogSubmit = (e) => {
     e.preventDefault()
@@ -16,7 +20,7 @@ const Form = ({ handleSubmit, rstUpd, configNoti, blogFormRef }) => {
       blogFormRef.current.toggleVisibility()
       e.target.reset()
     } else if (!newBlog.title && !newBlog.author && !newBlog.url) {
-      configNoti('All fields are required!', 'error')
+      notiDispatch(setNoti(['All fields are required!', 'error']))
       console.log('All fields are required!')
       return
     } else handleSubmit(newBlog)
@@ -41,6 +45,7 @@ const Form = ({ handleSubmit, rstUpd, configNoti, blogFormRef }) => {
           <label htmlFor="url">Likes</label>
           <input type="number" id="likes" name="likes" className="inp_form" />
         </div>
+
         <div className="frm_btn_container">
           <button type="submit" data-testid="submit_btn">
             Save Blog
