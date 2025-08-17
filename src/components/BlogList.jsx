@@ -1,9 +1,9 @@
-import { useEffect, useRef } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { Link, useNavigate } from 'react-router-dom'
-import { addNoti } from '../reducers/notifications'
-import { deleteBlog, likeBlog } from '../reducers/blogs'
-import { notUpdating, isUpdating } from '../reducers/is-updating'
+import { useEffect, useRef } from 'react';
+import { useDispatch } from 'react-redux';
+import { Link, useNavigate } from 'react-router-dom';
+import { deleteBlog, likeBlog } from '../reducers/blogs';
+import { isUpdating } from '../reducers/is-updating';
+import Comments from './Comments';
 
 export const Blog = ({ blog, users, userLoged }) => {
   const dispatch = useDispatch();
@@ -52,41 +52,43 @@ export const Blog = ({ blog, users, userLoged }) => {
 
   /* ----------------- ----------------- ----------------- */
 
-  return !blog ? (<>Loading blog...</>) :
-    (
-      <>
-        <h2>{blog.title}</h2>
-        <div className="blog_details">
-          <p>By {blog.author} - {blog.likes} likes</p>
-          <p><a href={blog.url}>{blog.url}</a></p>
-          <p>
-            Uploaded by&nbsp;
-            {typeof blog.user === 'object'
-              ? blog.user.name
-              : users.find((val) => val.id === blog.user).name}
-          </p>
+  return !blog ? (
+    <>Loading blog...</>
+  ) : (
+    <>
+      <h2>{blog.title}</h2>
+      <div className="blog_details">
+        <p>By {blog.author} - {blog.likes} likes</p>
+        <p><a href={blog.url}>{blog.url}</a></p>
+        <p>
+          Uploaded by&nbsp;
+          {typeof blog.user === 'object'
+            ? blog.user.name
+            : users.find((val) => val.id === blog.user).name}
+        </p>
+      </div>
+      <div className="btn_container">
+        <div className="always_show_btn">
+          <button
+            className="lks_btn"
+            onClick={() => onLikeClick()}
+          >Like</button>
         </div>
-        <div className="btn_container">
-          <div className="always_show_btn">
-            <button
-              className="lks_btn"
-              onClick={() => onLikeClick()}
-            >Like</button>
-          </div>
 
-          <div className="specific_show_btn">
-            <button
-              className="upd_btn"
-              onClick={() => onUpdClick()}
-            >Update</button>
-            <button
-              className="dlt_btn"
-              onClick={() => dispatch(deleteBlog(blog.id))}
-            >Delete</button>
-          </div>
+        <div className="specific_show_btn">
+          <button
+            className="upd_btn"
+            onClick={() => onUpdClick()}
+          >Update</button>
+          <button
+            className="dlt_btn"
+            onClick={() => dispatch(deleteBlog(blog.id))}
+          >Delete</button>
         </div>
-      </>
-    )
+      </div>
+      <Comments blog={blog} />
+    </>
+  )
 }
 
 export const BlogList = ({ blogs }) => {

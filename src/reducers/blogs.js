@@ -103,5 +103,21 @@ export const likeBlog = (id, likedBlog) => {
   }
 }
 
+export const commentBlog = (id, content) => {
+  return async (dispatch) => {
+    try {
+      const resp = await blogService.addComment(id, content);
+      dispatch(updatear(resp));
+      console.log('Comment successfully created:', resp);
+    } catch (error) {
+      dispatch(addNoti([
+        'Oops, something went wrong commenting the blog...',
+        'error'
+      ]))
+      console.error('Error commenting blog:', error)
+    }
+  }
+}
+
 export const { setear, createar, deletear, updatear } = blogSlice.actions
 export default blogSlice.reducer

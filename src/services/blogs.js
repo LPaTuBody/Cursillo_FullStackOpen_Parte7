@@ -27,4 +27,15 @@ const dilit = async (id) => {
   return resp.data
 }
 
-export default { getAll, create, update, dilit, setToken }
+const addComment = async (id, content) => {
+  const config = {
+    headers: { Authorization: token },
+  }
+  const url = `${baseUrl}/${id}/comments`;
+  const resp = await axios.post(url, { content }, config);
+  return resp.data
+}
+
+export default {
+  getAll, create, update, dilit, setToken, addComment
+}

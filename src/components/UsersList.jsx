@@ -34,7 +34,7 @@ export const UsersList = ({ users }) => (
       </TableHead>
       <TableBody>
         {users.map((user) => (
-          <TableRow>
+          <TableRow key={user.id}>
             <TableCell>
               <Link to={`/users/${user.id}`}>{user.name}</Link>
             </TableCell>
