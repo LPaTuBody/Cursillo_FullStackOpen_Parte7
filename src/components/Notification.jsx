@@ -12,7 +12,7 @@ const Notification = () => {
     backgroundColor: type === 'error' ? '#f8d7da' : '#d4edda',
     padding: '10px',
     borderRadius: '5px',
-    position: 'absolute',
+    position: 'fixed',
     top: '30px',
     left: '5%',
     width: '90%',

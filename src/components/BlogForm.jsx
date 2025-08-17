@@ -1,10 +1,11 @@
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import { createBlog } from '../reducers/blogs'
 import { addNoti } from '../reducers/notifications'
+import { notUpdating } from '../reducers/is-updating'
 
-const Form = ({ handleSubmit, rstUpd, blogFormRef }) => {
-  if (typeof handleSubmit !== 'function') throw new Error('handleSubmit must be a function')
-
-  const dispatch = useDispatch()
+const Form = ({ blogFormRef }) => {
+  const dispatch = useDispatch();
+  const edBlog = useSelector(state => state.isUpdating);
 
   const handleBlogSubmit = (e) => {
     e.preventDefault()
@@ -19,12 +20,21 @@ const Form = ({ handleSubmit, rstUpd, blogFormRef }) => {
     if (e.nativeEvent.submitter.className === 'returning') {
       blogFormRef.current.toggleVisibility()
       e.target.reset()
-    } else if (!newBlog.title && !newBlog.author && !newBlog.url) {
+    }
+    else if (!newBlog.title && !newBlog.author && !newBlog.url) {
       dispatch(addNoti(['All fields are required!', 'error']))
       console.log('All fields are required!')
       return
-    } else handleSubmit(newBlog)
+    }
+    else {
+      if (edBlog) {
+        dispatch(updateBlog(edBlog.id, newBlog))
+        dispatch(notUpdating())
+      } else dispatch(createBlog(newBlog))
+    }
   }
+
+  const rstUpd = () => dispatch(notUpdating());
 
   return (
     <div>

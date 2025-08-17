@@ -13,22 +13,6 @@ body {
     color: #333;
 }
 
-.header {
-    width: 80%;
-    margin: 40px auto;
-    text-align: center;
-}
-
-.welcome_msg span {
-    font-style: italic;
-}
-
-.welcome_msg {
-    font-size: 1.1em;
-    font-weight: 700;
-    margin-bottom: 5px;
-}
-
 h1 {
     font-weight: 900;
     color: #b849fc;
@@ -39,19 +23,64 @@ h2 {
     margin: 10px auto;
 }
 
-.logout_container {
+.salute {
+    width: 80%;
+    margin: 50px auto;
+    text-align: center;
+}
+
+
+.menu {
+    background-color: whitesmoke;
+    padding: 20px 10%;
+    display: flex;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    width: 100%;
+}
+
+
+/* header {
+    background-color: red;
+} */
+
+nav {
+    background-color: whitesmoke;
+    display: flex;
+    gap: 30px;
+    align-items: center;
+}
+
+nav a {
+    text-decoration: none;
+    font-size: 1.1em;
+    color: #333;
+    font-weight: 600;
+}
+
+nav a:visited {
+    color: #333;
+}
+
+/* .logout_container {
     position: fixed;
     bottom: 1.2%;
     right: 2%;
-}
+} */
 
-.logout_container button {
+.logout {
     background-color: transparent;
     border: none;
-    font-size: 32px;
+    font-size: 1.1em;
     cursor: pointer;
     color: #333;
 }
+
+
+
+
+
 
 .form_container {
     width: 80%;
@@ -62,8 +91,12 @@ h2 {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
+.form_container:has(#login_form) {
+    width: 50%;
+}
+
 form div {
-    margin-bottom: 15px;
+    margin: 20px 0;
 }
 
 .inp_form {
@@ -129,17 +162,17 @@ form button:hover {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-ul {
+.list_container ul {
     list-style-type: none;
 }
 
-li {
-    padding: 15px 10px;
+.list_container li {
+    padding: 15px 20px;
     border-bottom: 1px solid #ccc;
-    min-height: 93px;
+    /* min-height: 93px; */
 }
 
-li:last-child {
+.list_container li:last-child {
     border-bottom: none;
     padding-bottom: 10px;
 }

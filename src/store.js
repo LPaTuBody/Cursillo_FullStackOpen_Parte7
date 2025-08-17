@@ -4,6 +4,7 @@ import notificationReducer from './reducers/notifications'
 import blogReducer from './reducers/blogs'
 import userReducer from './reducers/users'
 import userLogedReducer from './reducers/loged-user'
+import isUpdReducer from './reducers/is-updating'
 
 export default configureStore({
   reducer: {
@@ -11,5 +12,6 @@ export default configureStore({
     blog: blogReducer,
     user: userReducer,
     logedUser: userLogedReducer,
+    isUpdating: isUpdReducer
   }
 })

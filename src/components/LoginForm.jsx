@@ -43,10 +43,12 @@ const loginForm = () => {
             className="inp_form"
           />
         </div>
-        <button type="submit" className="login">
-          Log-in
-        </button>
-        <button className="new_user">New in the app?</button>
+        <div className="frm_btn_container">
+          <button type="submit" className="login">
+            Log-in
+          </button>
+          <button className="new_user">New in the app?</button>
+        </div>
       </form>
     </div>
   )

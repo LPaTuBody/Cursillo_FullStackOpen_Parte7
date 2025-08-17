@@ -1,53 +1,52 @@
-import { useState, useEffect, useRef } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import './icons'
+import { useEffect, useRef } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Route, Routes, useMatch } from 'react-router-dom';
 
-import { setUsers } from './reducers/users'
-import { checkUserLoged, handleLogout } from './reducers/loged-user'
-import {
-  setBlogs,
-  createBlog,
-  updateBlog,
-} from './reducers/blogs'
+import { setUsers } from './reducers/users';
+import { checkUserLoged } from './reducers/loged-user';
+import { setBlogs } from './reducers/blogs';
 
-import List from './components/List'
-import BlogForm from './components/BlogForm'
-import LoginForm from './components/LoginForm'
-import Notification from './components/Notification'
-import Togglable from './components/Togglable'
+import Header from './components/Header';
+import { BlogList, Blog } from './components/BlogList';
+import BlogForm from './components/BlogForm';
+import LoginForm from './components/LoginForm';
+import Notification from './components/Notification';
+import Togglable from './components/Togglable';
+import { UsersList, User } from './components/UsersList';
 
 
 function App() {
-  const [edBlog, setEdBlog] = useState(null)
-  const user = useSelector(state => state.logedUser)
-  const blogFormRef = useRef()
-  const dispatch = useDispatch()
+  const blogFormRef = useRef();
+  const dispatch = useDispatch();
+
+  const userLoged = useSelector(state => state.logedUser);
+  const users = useSelector(state => state.user);
+  const blogs = useSelector(state => state.blog);
 
   useEffect(() => {
     dispatch(setBlogs())
     dispatch(setUsers())
     dispatch(checkUserLoged())
-  }, [])
+  }, []);
 
-  const handleUserLogout = () => {
-    dispatch(handleLogout())
-    setEdBlog(null)
-  }
+  const findUser = (id) => users.find(u => u.id === id);
+  const findBlog = (id) => blogs.find(b => b.id === id);
 
-  const handleBlogSubmit = (newBlog) => {
-    if (edBlog) {
-      dispatch(updateBlog(edBlog.id, newBlog))
-      setEdBlog(null)
-    } else dispatch(createBlog(newBlog))
-  }
+  const matchUser = useMatch('/users/:id');
+  const user = matchUser ? findUser(matchUser.params.id) : null;
+  // console.log(user)
+
+  const matchBlog = useMatch('/blogs/:id');
+  const blog = matchBlog ? findBlog(matchBlog.params.id) : null;
+  // console.log(blog)
 
   /* --------------------------------------------------- */
 
+
   // Sin usuario logueado
-  if (user === null) return (
+  if (!userLoged) return (
     <>
-      <div className="header">
+      <div className="salute">
         <h1>Log-in to App</h1>
       </div>
       <div className="form_container">
@@ -60,38 +59,23 @@ function App() {
   // Con usuario logueado
   return (
     <>
-      <div className="header">
-        <p className="welcome_msg">
-          Hello <span>{user.name}</span>!
-        </p>
-        <h1>Want to save a blog?</h1>
-      </div>
+      <Header />
 
       <div className="form_container">
         <Togglable buttonLabel={'Yes, I want to!'} ref={blogFormRef}>
           <h2>Add a Blog</h2>
-          <BlogForm
-            handleSubmit={handleBlogSubmit}
-            rstUpd={() => setEdBlog(null)}
-            blogFormRef={blogFormRef}
-          />
+          <BlogForm blogFormRef={blogFormRef} />
         </Togglable>
       </div>
 
-      <div className="list_container">
-        <h2>Blog List</h2>
-        <List
-          userLoged={user}
-          updatingBlog={(toUpdBlog) => setEdBlog(toUpdBlog)}
-          blogFormRef={blogFormRef}
-        />
-      </div>
-
-      <div className="logout_container">
-        <button className="logout" onClick={() => handleUserLogout()}>
-          <FontAwesomeIcon icon="fa-arrow-right-from-bracket" />
-        </button>
-      </div>
+      <Routes>
+        <Route path={'/blogs'} element={<BlogList blogs={blogs} />} />
+        <Route path={'/users'} element={<UsersList users={users} />} />
+        <Route path={'/users/:id'} element={<User user={user} />} />
+        <Route path={'/blogs/:id'} element={
+          <Blog blog={blog} users={users} userLoged={userLoged} />
+        } />
+      </Routes>
 
       <Notification />
     </>

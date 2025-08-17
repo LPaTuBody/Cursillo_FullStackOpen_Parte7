@@ -1,7 +1,11 @@
-import { useState, forwardRef, useImperativeHandle } from 'react'
+import { useState, forwardRef, useImperativeHandle, useEffect } from 'react'
+import { useMatch } from 'react-router-dom'
 
 const Togglable = forwardRef((props, refs) => {
   const [visible, setVisible] = useState(false)
+
+  const match = useMatch('/');
+  useEffect(() => { setVisible(match) }, [match]);
 
   const hideWhenVisible = { display: visible ? 'none' : '' }
   const showWhenVisible = { display: visible ? '' : 'none' }

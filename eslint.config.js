@@ -49,7 +49,7 @@ export default defineConfig([
       // '@stylistic/quotes': ['error', 'single'],
       // '@stylistic/semi': ['error', 'never'],
       '@stylistic/no-trailing-spaces': 2,
-      // '@stylistic/object-curly-spacing': ['error', 'always'],
+      '@stylistic/object-curly-spacing': ['error', 'always'],
       '@stylistic/arrow-spacing': [2, { before: true, after: true }],
     },
   },
