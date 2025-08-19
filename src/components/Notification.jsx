@@ -1,3 +1,4 @@
+import { Box, Button } from "@mui/material"
 import { useSelector, useDispatch } from "react-redux"
 import { rmNoti } from "../reducers/notifications"
 
@@ -13,11 +14,12 @@ const Notification = () => {
     padding: '10px',
     borderRadius: '5px',
     position: 'fixed',
-    top: '30px',
-    left: '5%',
-    width: '90%',
+    bottom: '30px',
+    left: '30px',
+    width: '40%',
     display: 'flex',
     justifyContent: 'space-between',
+    lineHeight: 1.5
   }
 
   const buttonStyle = {
@@ -25,17 +27,21 @@ const Notification = () => {
     border: 'none',
     color: type === 'error' ? 'red' : 'green',
     cursor: 'pointer',
-    marginLeft: '12px',
     fontSize: '0.9em',
+    marginLeft: '12px',
+    p: '5px 10px',
+    maxHeight: '30px',
+    minWidth: 0,
+    alignSelf: 'center',
   }
 
   return (
-    <div id="notification_div" style={notificationStyle}>
-      <p>{message}</p>
-      <button onClick={() => dispatch(rmNoti())} style={buttonStyle}>
+    <Box id="notification_div" sx={notificationStyle}>
+      <Box component={'p'}>{message}</Box>
+      <Button onClick={() => dispatch(rmNoti())} sx={buttonStyle}>
         &#10005;
-      </button>
-    </div>
+      </Button>
+    </Box>
   )
 }
 

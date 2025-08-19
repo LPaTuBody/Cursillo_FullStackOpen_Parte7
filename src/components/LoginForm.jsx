@@ -1,55 +1,67 @@
-import { useDispatch } from "react-redux"
-import { handleLogin } from "../reducers/loged-user"
+import { Box, Button, TextField } from '@mui/material';
+import { frmDiv } from '../styles/styles';
+import { useState } from 'react';
+import { useDispatch } from "react-redux";
+import { handleLogin } from "../reducers/loged-user";
 
 const loginForm = () => {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
+  const [username, setUsername] = useState('');
+  const [password, setPswd] = useState('');
 
-  const handleSubmitLogin = (e) => {
-    e.preventDefault()
-    if (e.nativeEvent.submitter.className === 'new_user')
-      console.log('Función en proceso...')
-    else {
-      const frmUsername = e.target[0].value
-      const frmPswd = e.target[1].value
-
-      if (!frmUsername) return e.target[0].focus()
-      else if (!frmPswd) return e.target[1].focus()
-
-      dispatch(handleLogin({
-        username: frmUsername,
-        password: frmPswd,
-      }))
-    }
+  const handleNewUser = () => {
+    console.log('Función en proceso...');
+    return
   }
+
+  const handleSubmit = () => {
+    const form = document.querySelector('form');
+    if (!username) return form[0].focus()
+    if (!password) return form[1].focus()
+
+    dispatch(handleLogin({ username, password }))
+  }
+
 
   return (
     <div>
-      <form id="login_form" onSubmit={handleSubmitLogin}>
-        <div>
+      <Box component={'form'} onSubmit={(e) => e.preventDefault()}>
+        <Box>
           <label htmlFor="username">Username</label>
-          <input
+          <TextField
+            fullWidth
             type="text"
             id="username"
             name="username"
-            className="inp_form"
+            required={true}
+            autoFocus={true}
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
           />
-        </div>
-        <div>
+        </Box>
+
+        <Box sx={frmDiv}>
           <label htmlFor="pswd">Password</label>
-          <input
+          <TextField
+            fullWidth
             type="password"
             id="pswd"
             name="password"
-            className="inp_form"
+            required={true}
+            value={password}
+            onChange={(e) => setPswd(e.target.value)}
           />
-        </div>
-        <div className="frm_btn_container">
-          <button type="submit" className="login">
+        </Box>
+
+        <Box sx={{ display: 'flex', gap: 1 }}>
+          <Button type="submit" onClick={handleSubmit}>
             Log-in
-          </button>
-          <button className="new_user">New in the app?</button>
-        </div>
-      </form>
+          </Button>
+          <Button color='secondary' onClick={handleNewUser}>
+            New in the app?
+          </Button>
+        </Box>
+      </Box>
     </div>
   )
 }

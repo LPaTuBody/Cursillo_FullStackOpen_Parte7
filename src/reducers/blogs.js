@@ -48,8 +48,8 @@ export const createBlog = (newBlog) => {
       console.log('Blog successfully created:', resp)
       document.querySelector('form').reset()
     } catch (err) {
-      dispatch(addNoti([err.response.data.error, 'error']))
       console.error('Error creating blog:', err)
+      dispatch(addNoti([err.response.data.error, 'error']))
     }
   }
 }
@@ -84,8 +84,8 @@ export const deleteBlog = (id) => {
         dispatch(addNoti(['Blog deleted successfully!', 'success']))
         console.log(`Blog with id ${id} deleted successfully`)
       } catch (error) {
-        dispatch(addNoti([error.response.data.error, 'error']))
         console.error('Error deleting blog:', error)
+        dispatch(addNoti([error.response.data.error, 'error']))
       }
     } else console.log('Blog deletion cancelled')
   }
@@ -97,8 +97,8 @@ export const likeBlog = (id, likedBlog) => {
       const resp = await blogService.update(id, likedBlog)
       dispatch(updatear(resp))
     } catch (error) {
-      dispatch(addNoti([error.response.data.error, 'error']))
       console.error('Error liking blog:', error)
+      dispatch(addNoti([error.response.data.error, 'error']))
     }
   }
 }

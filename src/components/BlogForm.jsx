@@ -1,5 +1,12 @@
+import {
+  Box,
+  Typography,
+  Button,
+  TextField,
+} from '@mui/material';
+import { frmDiv } from '../styles/styles';
 import { useDispatch, useSelector } from 'react-redux'
-import { createBlog } from '../reducers/blogs'
+import { createBlog, updateBlog } from '../reducers/blogs'
 import { addNoti } from '../reducers/notifications'
 import { notUpdating } from '../reducers/is-updating'
 
@@ -17,11 +24,7 @@ const Form = ({ blogFormRef }) => {
       likes: form.get('likes') ? form.get('likes') : 0,
     }
 
-    if (e.nativeEvent.submitter.className === 'returning') {
-      blogFormRef.current.toggleVisibility()
-      e.target.reset()
-    }
-    else if (!newBlog.title && !newBlog.author && !newBlog.url) {
+    if (!newBlog.title && !newBlog.author && !newBlog.url) {
       dispatch(addNoti(['All fields are required!', 'error']))
       console.log('All fields are required!')
       return
@@ -34,41 +37,54 @@ const Form = ({ blogFormRef }) => {
     }
   }
 
-  const rstUpd = () => dispatch(notUpdating());
+  const handleNvm = () => {
+    blogFormRef.current.toggleVisibility();
+    document.querySelector('form').reset();
+    dispatch(notUpdating());
+  }
 
   return (
-    <div>
-      <form id="frm_blog" onSubmit={handleBlogSubmit}>
-        <div>
-          <label htmlFor="title">Title</label>
-          <input type="text" id="title" name="title" className="inp_form" />
-        </div>
-        <div>
-          <label htmlFor="author">Author</label>
-          <input type="text" id="author" name="author" className="inp_form" />
-        </div>
-        <div>
-          <label htmlFor="url">URL</label>
-          <input type="text" id="url" name="url" className="inp_form" />
-        </div>
-        <div>
-          <label htmlFor="url">Likes</label>
-          <input type="number" id="likes" name="likes" className="inp_form" />
-        </div>
+    <Box>
+      <Typography variant='h2'>Add a Blog</Typography>
 
-        <div className="frm_btn_container">
-          <button type="submit" data-testid="submit_btn">
-            Save Blog
-          </button>
-          <button type="reset" className="reset_btn" onClick={rstUpd}>
-            Reset
-          </button>
-          <button className="returning" onClick={rstUpd}>
-            Nevermind
-          </button>
-        </div>
-      </form>
-    </div>
+      <Box component={'form'} onSubmit={handleBlogSubmit} id='frm_blog'>
+        <Box sx={frmDiv}>
+          <label htmlFor="title">Title</label>
+          <TextField type="text" id="title" name="title" fullWidth />
+        </Box>
+        <Box sx={frmDiv}>
+          <label htmlFor="author">Author</label>
+          <TextField type="text" id="author" name="author" fullWidth />
+        </Box>
+        <Box sx={frmDiv}>
+          <label htmlFor="url">URL</label>
+          <TextField type="text" id="url" name="url" fullWidth />
+        </Box>
+        <Box sx={frmDiv}>
+          <label htmlFor="likes">Likes</label>
+          <TextField type="number" id="likes" name="likes" fullWidth />
+        </Box>
+
+        <Box sx={{ display: 'flex', gap: 1 }}>
+          <Button
+            type="submit"
+            data-testid="submit_btn"
+          >Save Blog</Button>
+
+          <Button
+            type="reset"
+            color='error'
+            onClick={() => dispatch(notUpdating())}
+          >Reset</Button>
+
+          <Button
+            color='secondary'
+            onClick={handleNvm}
+            sx={{ ml: 'auto' }}
+          >Nevermind</Button>
+        </Box>
+      </Box>
+    </Box>
   )
 }
 

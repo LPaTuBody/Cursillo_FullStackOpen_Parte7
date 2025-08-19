@@ -1,3 +1,4 @@
+import { Box, Button } from '@mui/material'
 import { useState, forwardRef, useImperativeHandle, useEffect } from 'react'
 import { useMatch } from 'react-router-dom'
 
@@ -17,17 +18,28 @@ const Togglable = forwardRef((props, refs) => {
     displayVal: showWhenVisible.display,
   }))
 
+  const btnShowStyle = {
+    backgroundColor: 'transparent',
+    border: 'none',
+    margin: '0 auto',
+    display: 'block',
+    cursor: 'pointer',
+    fontWeight: 700,
+    fontSize: '1em',
+    color: 'black'
+  }
+
   return (
-    <div>
-      <div style={hideWhenVisible}>
-        <button className="btn_show_frm" onClick={toggleVisibility}>
+    <Box>
+      <Box style={hideWhenVisible}>
+        <Button variant='text' sx={btnShowStyle} onClick={toggleVisibility}>
           {props.buttonLabel}
-        </button>
-      </div>
-      <div style={showWhenVisible} id="show_when_visible">
+        </Button>
+      </Box>
+      <Box style={showWhenVisible} id="show_when_visible">
         {props.children}
-      </div>
-    </div>
+      </Box>
+    </Box>
   )
 })
 

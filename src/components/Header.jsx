@@ -1,38 +1,17 @@
-import { Box, Button } from '@mui/material'
+import {
+  Box,
+  IconButton,
+  Typography,
+  Link as MuiLink,
+} from '@mui/material'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { salute } from '../styles/styles'
 import { useSelector } from "react-redux"
 import { Link } from 'react-router-dom'
 import { useDispatch } from "react-redux"
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import styled from 'styled-components'
-
 import { handleLogout } from '../reducers/loged-user'
 import { notUpdating } from '../reducers/is-updating'
 
-const WelcomeMsg = styled.p`
-  font-size: 1.1em;
-  font-weight: 700;
-  margin-bottom: 5px;
-`
-const UserName = styled.span`
-  font-style: italic;
-`
-/*
-const LogoutContainer = styled.div`
-  position: fixed;
-  bottom: 1.2%;
-  right: 2%;
-`
-const LogoutBtn = styled.button`
-  background-color: transparent;
-  border: none;
-  font-size: 32px;
-  cursor: pointer;
-  color: #333;
-`
-const NavBar = styled.nav`
-  background-color: ;
-`
-*/
 
 const Header = () => {
   const user = useSelector(state => state.logedUser)
@@ -43,22 +22,41 @@ const Header = () => {
     dispatch(notUpdating())
   }
 
-  const linkStyle = {
+  // estilos
+  const spanStyle = {
+    fontStyle: 'italic',
+    fontWeight: 900,
+    color: 'primary.main',
+    cursor: 'pointer',
+  }
+
+  const menuLink = {
     textDecoration: 'none',
     fontSize: '1.1em',
     color: '#333',
     fontWeight: 600,
+    padding: '5px 8px',
+    borderRadius: '20px',
+    transition: 'all 0.1s ease',
+    '&:visited': { color: '#333' },
+    '&:hover': {
+      textDecoration: 'none',
+      backgroundColor: 'rgba(0, 0, 0, 0.04)'
+    },
   }
 
-  const spanStyle = {
-    fontStyle: 'italic',
-    fontWeight: 900,
-    color: '#b849fc',
-  }
 
   return (
-    <header>
-      <div className="menu">
+    <Box component={'header'}>
+      <Box sx={{
+        backgroundColor: 'whitesmoke',
+        padding: '20px 10%',
+        display: 'flex',
+        justifyContent: 'space-between',
+        position: 'sticky',
+        top: 0,
+        width: '100%'
+      }}>
         <Box sx={{
           fontSize: '1.6em',
           fontWeight: 700,
@@ -68,25 +66,50 @@ const Header = () => {
             backgroundColor: 'transparent',
           }
         }}>
-          <Link to={'/'} style={linkStyle}>
+          <Link to={'/'} style={{
+            textDecoration: 'none',
+            fontSize: '1.1em',
+            color: '#333',
+            fontWeight: 600,
+            cursor: 'pointer',
+          }}>
             <Box component={'span'} sx={spanStyle}>Your</Box>Blogs
           </Link>
         </Box>
-        <nav>
-          <Link to={'/blogs'}>Blogs</Link>
-          <Link to={'/users'}>Users</Link>
-          <button className="logout" onClick={() => handleUserLogout()}>
-            <FontAwesomeIcon icon="fa-arrow-right-from-bracket" />
-          </button>
-        </nav>
-      </div>
-      <div className="salute">
-        <WelcomeMsg className="welcome_msg">
-          Hello <UserName>{user.name}</UserName>!
-        </WelcomeMsg>
-        <h1>Want to save a blog?</h1>
-      </div>
-    </header>
+
+        <Box component={'nav'} sx={{
+          backgroundColor: 'whitesmoke',
+          display: 'flex',
+          gap: '30px',
+          alignItems: 'center'
+        }}>
+          <MuiLink component={Link} to={'/blogs'} sx={menuLink}>
+            Blogs
+          </MuiLink>
+          <MuiLink component={Link} to={'/users'} sx={menuLink}>
+            Users
+          </MuiLink>
+          <IconButton
+            onClick={() => handleUserLogout()}
+            sx={{
+              backgroundColor: 'transparent',
+              border: 'none',
+              fontSize: '1.1em',
+              cursor: 'pointer',
+              color: '#333',
+              '& svg': { cursor: 'pointer' }
+            }}
+          ><FontAwesomeIcon icon="fa-arrow-right-from-bracket" /></IconButton>
+        </Box>
+      </Box>
+
+      <Box sx={salute}>
+        <Box sx={{ fontSize: '1.1em', fontWeight: 700, mb: '5px' }}>
+          Hello <em>{user.name}</em>!
+        </Box>
+        <Typography variant='h1'>Want to save a blog?</Typography>
+      </Box>
+    </Box>
   )
 }
 

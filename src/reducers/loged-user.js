@@ -13,14 +13,32 @@ const logedUserSlice = createSlice({
   }
 })
 
+const checkToken = async (token) => {
+  try {
+    await loginService.getToken(token)
+    return false
+  } catch (err) {
+    const errMsg = (err.response.data.error).toLowerCase()
+    return errMsg === 'token expired'
+  }
+}
+
 export const checkUserLoged = () => {
   return async (dispatch) => {
     try {
       const rawUser = window.localStorage.getItem('userLogedIn')
       if (rawUser) {
-        const user = JSON.parse(rawUser)
-        blogService.setToken(user.token)
-        dispatch(setear(user))
+        const user = JSON.parse(rawUser);
+        const isExpired = await checkToken(user.token);
+
+        if (!isExpired) {
+          blogService.setToken(user.token)
+          dispatch(setear(user))
+        }
+        else {
+          dispatch(handleLogout())
+          dispatch(addNoti(['Session expired', 'error']))
+        }
       }
     } catch (error) {
       console.error('Error login user:', error)

@@ -1,13 +1,19 @@
 import { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Route, Routes, useMatch } from 'react-router-dom';
+import {
+  Route, Routes, useMatch, useLocation, useNavigate
+} from 'react-router-dom';
+
+import { Box, Typography } from '@mui/material';
+import { pagBox, salute } from './styles/styles';
 
 import { setUsers } from './reducers/users';
 import { checkUserLoged } from './reducers/loged-user';
 import { setBlogs } from './reducers/blogs';
 
 import Header from './components/Header';
-import { BlogList, Blog } from './components/BlogList';
+import BlogList from './components/BlogList';
+import Blog from './components/Blog';
 import BlogForm from './components/BlogForm';
 import LoginForm from './components/LoginForm';
 import Notification from './components/Notification';
@@ -18,6 +24,8 @@ import { UsersList, User } from './components/UsersList';
 function App() {
   const blogFormRef = useRef();
   const dispatch = useDispatch();
+  const location = useLocation();
+  const navigate = useNavigate();
 
   const userLoged = useSelector(state => state.logedUser);
   const users = useSelector(state => state.user);
@@ -26,34 +34,36 @@ function App() {
   useEffect(() => {
     dispatch(setBlogs())
     dispatch(setUsers())
-    dispatch(checkUserLoged())
+    navigate('/')
   }, []);
+
+  useEffect(() => {
+    dispatch(checkUserLoged())
+  }, [location.pathname])
 
   const findUser = (id) => users.find(u => u.id === id);
   const findBlog = (id) => blogs.find(b => b.id === id);
 
   const matchUser = useMatch('/users/:id');
   const user = matchUser ? findUser(matchUser.params.id) : null;
-  // console.log(user)
 
   const matchBlog = useMatch('/blogs/:id');
   const blog = matchBlog ? findBlog(matchBlog.params.id) : null;
-  // console.log(blog)
 
   /* --------------------------------------------------- */
 
 
   // Sin usuario logueado
   if (!userLoged) return (
-    <>
-      <div className="salute">
-        <h1>Log-in to App</h1>
-      </div>
-      <div className="form_container">
+    <Box sx={{ mt: '20vh' }}>
+      <Box sx={salute}>
+        <Typography variant='h1'>Log-in to App</Typography>
+      </Box>
+      <Box sx={{...pagBox, width: '50%'}}>
         <LoginForm />
-      </div>
+      </Box>
       <Notification />
-    </>
+    </Box>
   )
 
   // Con usuario logueado
@@ -61,12 +71,11 @@ function App() {
     <>
       <Header />
 
-      <div className="form_container">
+      <Box sx={pagBox}>
         <Togglable buttonLabel={'Yes, I want to!'} ref={blogFormRef}>
-          <h2>Add a Blog</h2>
           <BlogForm blogFormRef={blogFormRef} />
         </Togglable>
-      </div>
+      </Box>
 
       <Routes>
         <Route path={'/blogs'} element={<BlogList blogs={blogs} />} />
